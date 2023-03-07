@@ -19,7 +19,7 @@ def abrir_ingresos():
     # Agregar lista desplegable con diferentes categorías
     lbl_categoria = tk.Label(ventana_ingresos, text="Categoría:")
     lbl_categoria.pack(pady=5)
-    opciones_categoria = ["Opción 1", "Opción 2", "Opción 3"]
+    opciones_categoria = ["Comida", "Electronica", "Hogar"]
     cmb_categoria = ttk.Combobox(ventana_ingresos, values=opciones_categoria)
     cmb_categoria.pack(pady=5)
 
