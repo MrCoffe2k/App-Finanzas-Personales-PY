@@ -39,9 +39,12 @@ def abrir_ingresos():
     cal_fecha.pack(pady=5)
 
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_ingresos, text="Inicio",
-                           command=ventana_ingresos.destroy)
+    btn_inicio = tk.Button(ventana_ingresos, text="Inicio",command=ventana_ingresos.destroy)
     btn_inicio.pack(pady=10)
+
+    # Crear botón de guardar en la ventana emergente
+    btn_guardar = tk.Button(ventana_ingresos, text="Guardar", command=guardar_ingreso)
+    btn_guardar.pack(pady=10)
 
 
 def validar_numero(valor):
@@ -65,9 +68,13 @@ def guardar_ingreso():
         "fecha": fecha
     }
 
+    # Escribir el diccionario en un archivo JSON
+    with open("ingresos.json", "w") as file:
+        json.dump(ingreso, file)
+    '''
     # Cargar el archivo JSON existente
-    with open("ingresos.json", "r") as f:
-        data = json.load(f)
+    with open("ingresos.json", "r") as file:
+        data = json.load(file)
 
     # Agregar el nuevo ingreso al archivo
     data.append(ingreso)
@@ -75,14 +82,11 @@ def guardar_ingreso():
     # Guardar los datos actualizados en el archivo
     with open("ingresos.json", "w") as f:
         json.dump(data, f)
-
+    '''
     # Cerrar la ventana de ingresos
     ventana_ingresos.destroy()
 
-    # Crear botón de guardar en la ventana emergente
-    btn_guardar = tk.Button(
-        ventana_ingresos, text="Guardar", command=guardar_ingreso)
-    btn_guardar.pack(pady=10)
+    
 
 
 def abrir_gastos():
