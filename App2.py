@@ -42,7 +42,7 @@ def abrir_ingresos():
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_ingresos, text="Inicio",command=ventana_ingresos.destroy)
     btn_inicio.pack(pady=10)
-    
+
     # Crear botón de guardar en la ventana emergente
     btn_guardar = tk.Button(ventana_ingresos, text="Guardar", command=guardar_ingreso)
     btn_guardar.pack(pady=10)
@@ -87,8 +87,10 @@ def guardar_ingreso():
         # Escribir el diccionario en un archivo JSON
         with open("ingresos.json", "w") as file:
             json.dump(ingreso, file)
-
-
+    '''
+    # Cerrar la ventana de ingresos
+    ventana_ingresos.destroy()
+    '''
     
 
 
