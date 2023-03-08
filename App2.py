@@ -68,6 +68,7 @@ def guardar_ingreso():
         "fecha": fecha
     }
 
+    # Colocar una condición en caso de que ya exista el archivo
     # Escribir el diccionario en un archivo JSON
     with open("ingresos.json", "w") as file:
         json.dump(ingreso, file)
