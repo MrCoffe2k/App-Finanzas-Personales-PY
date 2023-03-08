@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkcalendar import Calendar
 import json
 from datetime import datetime
+import os
 
 # Funciones que se ejecutan al hacer clic en los botones del menú principal
 
@@ -21,10 +22,10 @@ def abrir_ingresos():
     entry_monto.pack(pady=5)
 
     # Crear lista desplegable para seleccionar la categoría
-    lbl_categoria = tk.Label(ventana_ingresos, text="Categoría:")
+    lbl_categoria = tk.Label(ventana_ingresos, text="Categoria:")
     lbl_categoria.pack(pady=5)
-    categorias = ["Alimentación", "Transporte",
-                  "Entretenimiento", "Salud", "Educación", "Otros"]
+    categorias = ["Alimentacion", "Transporte",
+                  "Entretenimiento", "Salud", "Educacion", "Otros"]
     global var_categoria
     var_categoria = tk.StringVar(value=categorias[0])
     combo_categoria = tk.OptionMenu(
@@ -59,7 +60,7 @@ def guardar_ingreso():
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
     categoria = var_categoria.get()
-    fecha = cal_fecha.selection_get().strftime('%Y-%m-%d')
+    fecha = cal_fecha.selection_get().strftime('%d-%m-%Y')
 
     # Crear un diccionario con los valores
     ingreso = {
@@ -69,21 +70,24 @@ def guardar_ingreso():
     }
 
     # Colocar una condición en caso de que ya exista el archivo
-    # Escribir el diccionario en un archivo JSON
-    with open("ingresos.json", "w") as file:
-        json.dump(ingreso, file)
-    '''
-    # Cargar el archivo JSON existente
-    with open("ingresos.json", "r") as file:
-        data = json.load(file)
+    archivoJ = "ingresos.json"
+    if os.path.exists(archivoJ):
+        # Cargar el archivo JSON existente
+        with open("ingresos.json", "r") as file:
+            data = json.load(file)
 
-    # Agregar el nuevo ingreso al archivo
-    data.append(ingreso)
+            # Agregar el nuevo ingreso al archivo
+            data.update(ingreso)
 
-    # Guardar los datos actualizados en el archivo
-    with open("ingresos.json", "w") as f:
-        json.dump(data, f)
-    '''
+        # Guardar los datos actualizados en el archivo
+        with open("ingresos.json", "w") as f:
+            json.dump(data, f)
+
+    else:
+        # Escribir el diccionario en un archivo JSON
+        with open("ingresos.json", "w") as file:
+            json.dump(ingreso, file)
+
     # Cerrar la ventana de ingresos
     ventana_ingresos.destroy()
 
