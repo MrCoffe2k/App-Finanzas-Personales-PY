@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 
 # Funciones que se ejecutan al hacer clic en los botones del menú principal
+
+
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
@@ -21,22 +23,26 @@ def abrir_ingresos():
     # Crear lista desplegable para seleccionar la categoría
     lbl_categoria = tk.Label(ventana_ingresos, text="Categoría:")
     lbl_categoria.pack(pady=5)
-    categorias = ["Alimentación", "Transporte", "Entretenimiento", "Salud", "Educación", "Otros"]
+    categorias = ["Alimentación", "Transporte",
+                  "Entretenimiento", "Salud", "Educación", "Otros"]
     global var_categoria
     var_categoria = tk.StringVar(value=categorias[0])
-    combo_categoria = tk.OptionMenu(ventana_ingresos, var_categoria, *categorias)
+    combo_categoria = tk.OptionMenu(
+        ventana_ingresos, var_categoria, *categorias)
     combo_categoria.pack(pady=5)
 
     # Crear calendario para seleccionar la fecha
     lbl_fecha = tk.Label(ventana_ingresos, text="Fecha:")
     lbl_fecha.pack(pady=5)
     global cal_fecha
-    cal_fecha = tk.Calendar(ventana_ingresos)
+    cal_fecha = Calendar(ventana_ingresos)
     cal_fecha.pack(pady=5)
 
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_ingresos, text="Inicio", command=ventana_ingresos.destroy)
+    btn_inicio = tk.Button(ventana_ingresos, text="Inicio",
+                           command=ventana_ingresos.destroy)
     btn_inicio.pack(pady=10)
+
 
 def validar_numero(valor):
     # Función para validar que el campo solo contenga números
@@ -44,6 +50,7 @@ def validar_numero(valor):
         return True
     else:
         return False
+
 
 def guardar_ingreso():
     # Obtener los valores de los campos de entrada
@@ -73,24 +80,55 @@ def guardar_ingreso():
     ventana_ingresos.destroy()
 
     # Crear botón de guardar en la ventana emergente
-    btn_guardar = tk.Button(ventana_ingresos, text="Guardar", command=guardar_ingreso)
+    btn_guardar = tk.Button(
+        ventana_ingresos, text="Guardar", command=guardar_ingreso)
     btn_guardar.pack(pady=10)
+
 
 def abrir_gastos():
     # Crear ventana emergente para gastos
     ventana_gastos = tk.Toplevel()
     ventana_gastos.geometry("500x500")
+    
+    # Crear campo para ingresar el monto
+    lbl_monto = tk.Label(ventana_gastos, text="Monto:")
+    lbl_monto.pack(pady=5)
+    global entry_monto
+    entry_monto = tk.Entry(ventana_gastos)
+    entry_monto.pack(pady=5)
+
+    # Crear lista desplegable para seleccionar la categoría
+    lbl_categoria = tk.Label(ventana_gastos, text="Categoría:")
+    lbl_categoria.pack(pady=5)
+    categorias = ["Alimentación", "Transporte",
+                  "Entretenimiento", "Salud", "Educación", "Otros"]
+    global var_categoria
+    var_categoria = tk.StringVar(value=categorias[0])
+    combo_categoria = tk.OptionMenu(ventana_gastos, var_categoria, *categorias)
+    combo_categoria.pack(pady=5)
+
+    # Crear calendario para seleccionar la fecha
+    lbl_fecha = tk.Label(ventana_gastos, text="Fecha:")
+    lbl_fecha.pack(pady=5)
+    global cal_fecha
+    cal_fecha = Calendar(ventana_gastos)
+    cal_fecha.pack(pady=5)
+
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_gastos, text="Inicio", command=ventana_gastos.destroy)
+    btn_inicio = tk.Button(ventana_gastos, text="Inicio",
+                           command=ventana_gastos.destroy)
     btn_inicio.pack(pady=10)
+
 
 def abrir_resumen():
     # Crear ventana emergente para resumen
     ventana_resumen = tk.Toplevel()
     ventana_resumen.geometry("500x500")
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_resumen, text="Inicio", command=ventana_resumen.destroy)
+    btn_inicio = tk.Button(ventana_resumen, text="Inicio",
+                           command=ventana_resumen.destroy)
     btn_inicio.pack(pady=10)
+
 
 # Crear ventana principal
 ventana = tk.Tk()
