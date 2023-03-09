@@ -73,11 +73,11 @@ def guardar_ingreso():
     archivoJ = "ingresos.json"
     if os.path.exists(archivoJ):
         # Cargar el archivo JSON existente
-        with open("ingresos.json", "r") as file:
-            data = json.load(file)
+        with open("ingresos.json", "r") as f:
+            data = json.load(f)
 
             # Agregar el nuevo ingreso al archivo
-            data.update(ingreso)
+            data.append(ingreso)
 
         # Guardar los datos actualizados en el archivo
         with open("ingresos.json", "w") as f:
