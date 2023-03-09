@@ -1,14 +1,11 @@
 import tkinter as tk
 from tkcalendar import Calendar
-import json
-import os
 import sqlite3
 
 # Conectar a la base de datos
 conexion = sqlite3.connect('finanzas.db')
 
 # Funciones que se ejecutan al hacer clic en los botones del menú principal
-
 
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
@@ -51,6 +48,12 @@ def guardar_ingreso():
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
     fecha = cal_fecha.selection_get().strftime('%d-%m-%Y')
+    c = conexion.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS ingresos
+                 (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
+    c.execute("INSERT INTO ingresos VALUES (?, ?, ?, 'ingreso')", (monto, fecha, None))
+    conexion.commit()
+    conexion.close()
 
     '''
     # Cerrar la ventana de ingresos
