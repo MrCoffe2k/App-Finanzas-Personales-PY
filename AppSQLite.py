@@ -92,10 +92,29 @@ def abrir_gastos():
     cal_fecha.pack(pady=5)
 
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_gastos, text="Inicio",
-                           command=ventana_gastos.destroy)
+    btn_inicio = tk.Button(ventana_gastos, text="Inicio", command=ventana_gastos.destroy)
     btn_inicio.pack(pady=10)
 
+    # Crear botón de guardar en la ventana emergente
+    btn_guardar = tk.Button(ventana_gastos, text="Guardar", command=guardar_gasto)
+    btn_guardar.pack(pady=10)
+
+def guardar_gasto():
+    # Obtener los valores de los campos de entrada
+    monto = entry_monto.get()
+    categoria = var_categoria.get()
+    fecha = cal_fecha.selection_get().strftime('%d-%m-%Y')
+    c = conexion.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS gastos
+                 (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
+    c.execute("INSERT INTO gastos VALUES (?, ?, ?, 'gasto')", (monto, fecha, categoria))
+    conexion.commit()
+    conexion.close()
+
+    '''
+    # Cerrar la ventana de ingresos
+    ventana_ingresos.destroy()
+    '''
 
 def abrir_resumen():
     # Crear ventana emergente para resumen
