@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkcalendar import Calendar
 import sqlite3
+import pandas as pd
 
 # Conectar a la base de datos
 conexion = sqlite3.connect('finanzas.db')
@@ -106,9 +107,16 @@ def abrir_resumen():
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
     ventana_resumen.geometry("500x500")
+    
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_resumen, text="Inicio", command=ventana_resumen.destroy)
     btn_inicio.pack(pady=10)
+
+    # Consultar la tabla y cargar los datos en un DataFrame de Pandas
+    df = pd.read_sql_query("SELECT * from movimientos", conexion)
+
+    # Mostrar la tabla
+    print(df)
 
 # Función para cerrar la conexion a la base de datos y las ventanas
 def cerrar():
