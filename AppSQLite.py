@@ -35,14 +35,12 @@ def abrir_ingresos():
     btn_guardar = tk.Button(ventana_ingresos, text="Guardar", command=guardar_ingreso)
     btn_guardar.pack(pady=10)
 
-
 def validar_numero(valor):
     # Función para validar que el campo solo contenga números
     if valor.isnumeric() or valor == "":
         return True
     else:
         return False
-
 
 def guardar_ingreso():
     # Obtener los valores de los campos de entrada
@@ -53,17 +51,10 @@ def guardar_ingreso():
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
     c.execute("INSERT INTO ingresos VALUES (?, ?, ?, 'ingreso')", (monto, fecha, None))
     conexion.commit()
-    conexion.close()
-
-    '''
-    # Cerrar la ventana de ingresos
-    ventana_ingresos.destroy()
-    '''
-    
-
 
 def abrir_gastos():
     # Crear ventana emergente para gastos
+    global ventana_gastos
     ventana_gastos = tk.Toplevel()
     ventana_gastos.geometry("500x500")
     
@@ -109,22 +100,20 @@ def guardar_gasto():
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
     c.execute("INSERT INTO gastos VALUES (?, ?, ?, 'gasto')", (monto, fecha, categoria))
     conexion.commit()
-    conexion.close()
-
-    '''
-    # Cerrar la ventana de ingresos
-    ventana_ingresos.destroy()
-    '''
 
 def abrir_resumen():
     # Crear ventana emergente para resumen
+    global ventana_resumen
     ventana_resumen = tk.Toplevel()
     ventana_resumen.geometry("500x500")
     # Crear botón de inicio en la ventana emergente
-    btn_inicio = tk.Button(ventana_resumen, text="Inicio",
-                           command=ventana_resumen.destroy)
+    btn_inicio = tk.Button(ventana_resumen, text="Inicio", command=ventana_resumen.destroy)
     btn_inicio.pack(pady=10)
 
+# Función para cerrar la conexion a la base de datos y las ventanas
+def cerrar():
+    conexion.close()
+    ventana.destroy()
 
 # Crear ventana principal
 ventana = tk.Tk()
@@ -136,11 +125,13 @@ ventana.geometry("500x500")
 btn_ingresos = tk.Button(ventana, text="Ingresos", command=abrir_ingresos)
 btn_gastos = tk.Button(ventana, text="Gastos", command=abrir_gastos)
 btn_resumen = tk.Button(ventana, text="Resumen", command=abrir_resumen)
+btn_salir = tk.Button(ventana, text="Salir", command=cerrar)
 
 # Posicionar botones en la ventana
 btn_ingresos.pack(pady=10)
 btn_gastos.pack(pady=10)
 btn_resumen.pack(pady=10)
+btn_salir.pack(pady=10)
 
 # Ejecutar ventana
 ventana.mainloop()
