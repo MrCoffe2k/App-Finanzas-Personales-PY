@@ -1,5 +1,6 @@
-import tkinter as tk
 from tkcalendar import Calendar
+from tkinter import ttk
+import tkinter as tk
 import sqlite3
 import pandas as pd
 
@@ -35,13 +36,6 @@ def abrir_ingresos():
     # Crear botón de guardar en la ventana emergente
     btn_guardar = tk.Button(ventana_ingresos, text="Guardar", command=guardar_ingreso)
     btn_guardar.pack(pady=10)
-
-def validar_numero(valor):
-    # Función para validar que el campo solo contenga números
-    if valor.isnumeric() or valor == "":
-        return True
-    else:
-        return False
 
 def guardar_ingreso():
     # Obtener los valores de los campos de entrada
@@ -114,9 +108,35 @@ def abrir_resumen():
 
     # Consultar la tabla y cargar los datos en un DataFrame de Pandas
     df = pd.read_sql_query("SELECT * from movimientos", conexion)
+      
+    # Crear una tabla tkinter usando el widget Table
+    class Table(tk.Frame):
+        def __init__(self, parent=None, headings=tuple(), rows=tuple()):
+            super().__init__(parent)
 
-    # Mostrar la tabla
-    print(df)
+            table = ttk.Treeview(self, show="headings", selectmode="browse")
+            table["columns"] = headings
+            table["displaycolumns"] = headings
+
+            for head in headings:
+                table.heading(head, text=head, anchor="center")
+                table.column(head, anchor="center")
+
+            for row in rows:
+                table.insert("", "end", values=row)
+
+            scrolltable = ttk.Scrollbar(self, orient="vertical", command=table.yview)
+            table.configure(yscrollcommand=scrolltable.set)
+            scrolltable.pack(side="right", fill="y")
+            table.pack(expand=True, fill="both")
+
+    # Obtener los encabezados y las filas de la tabla
+    headings = df.columns.tolist()
+    rows = df.values.tolist()
+
+    # Crear y mostrar la tabla en la ventana emergente
+    table = Table(ventana_resumen, headings=headings, rows=rows)
+    table.pack(expand=True, fill="both")
 
 # Función para cerrar la conexion a la base de datos y las ventanas
 def cerrar():

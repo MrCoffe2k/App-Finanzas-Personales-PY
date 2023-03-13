@@ -1,0 +1,4 @@
+pip install tkcalendar
+pip install pandas
+pip install pandasgui
+pip install tkintertable
