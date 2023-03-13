@@ -11,6 +11,9 @@ conexion = sqlite3.connect('finanzas.db')
 
 # Funciones que se ejecutan al hacer clic en los botones del menú principal
 
+# Formato de fecha
+date = '%Y-%m-%d'
+
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
@@ -42,7 +45,7 @@ def abrir_ingresos():
 def guardar_ingreso():
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
-    fecha = cal_fecha.selection_get().strftime('%d-%m-%Y')
+    fecha = cal_fecha.selection_get().strftime(date)
     c = conexion.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS movimientos
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
@@ -91,7 +94,7 @@ def guardar_gasto():
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
     categoria = var_categoria.get()
-    fecha = cal_fecha.selection_get().strftime('%d-%m-%Y')
+    fecha = cal_fecha.selection_get().strftime(date)
     c = conexion.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS movimientos
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
@@ -116,9 +119,9 @@ def calcular_gastos():
     # Obtener el mes y año seleccionados
     mes = meses[cbx_mes.get()]
     year = int(cbx_year.get())
-    fecha_inicio = datetime.datetime(year, mes, 1).strftime('%d-%m-%Y')
+    fecha_inicio = datetime.datetime(year, mes, 1).strftime(date)
     fecha_fin = datetime.datetime(year, mes +1, 1) - datetime.timedelta(days=1)
-    fecha_fin = fecha_fin.strftime('%d-%m-%Y')
+    fecha_fin = fecha_fin.strftime(date)
     
     # Consultar la tabla y filtrar por el período seleccionado
     df = pd.read_sql_query(f"SELECT * from movimientos WHERE fecha BETWEEN '{fecha_inicio}' AND '{fecha_fin}'", conexion)
