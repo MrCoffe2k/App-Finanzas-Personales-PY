@@ -133,7 +133,7 @@ def calcular_gastos():
         total_gastos = df[df["tipo"] == "gasto"]["monto"].sum()
 
         # Mostrar el total de gastos en un mensaje
-        messagebox.showinfo("Total de gastos", f"El total de gastos en {mes}/{year} es de ${total_gastos}")
+        messagebox.showinfo("Total de gastos", f"El total de gastos en {cbx_mes.get()} - {cbx_year.get()} es de ${total_gastos}")
     
 def abrir_resumen():
     # Crear ventana emergente para resumen
