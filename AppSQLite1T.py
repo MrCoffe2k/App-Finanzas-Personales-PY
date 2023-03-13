@@ -1,6 +1,7 @@
 from tkcalendar import Calendar
 from tkinter import ttk
 import tkinter as tk
+import tkinter.font as tkFont
 import sqlite3
 import pandas as pd
 
@@ -44,7 +45,7 @@ def guardar_ingreso():
     c = conexion.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS movimientos
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
-    c.execute("INSERT INTO movimientos VALUES (?, ?, ?, 'ingreso')", (monto, fecha, None))
+    c.execute("INSERT INTO movimientos VALUES (?, ?, ' ', 'ingreso')", (monto, fecha))
     conexion.commit()
 
 def abrir_gastos():
@@ -111,24 +112,55 @@ def abrir_resumen():
       
     # Crear una tabla tkinter usando el widget Table
     class Table(tk.Frame):
-        def __init__(self, parent=None, headings=tuple(), rows=tuple()):
+        def __init__(self, parent=None, headings=tuple(), rows=list()):
             super().__init__(parent)
 
-            table = ttk.Treeview(self, show="headings", selectmode="browse")
-            table["columns"] = headings
-            table["displaycolumns"] = headings
+            self.headings = headings
+            self.rows = rows
+            self.sort_column = None
+            self.sort_descending = False
+
+            self.table = ttk.Treeview(self, show="headings", selectmode="browse")
+            self.table["columns"] = headings
+            self.table["displaycolumns"] = headings
 
             for head in headings:
-                table.heading(head, text=head, anchor="center")
-                table.column(head, anchor="center")
+                self.table.heading(head, text=head, anchor="center")
+                self.table.column(head, anchor="center", width=tkFont.Font().measure(head))
+                self.table.heading(head, command=lambda col=head: self.sort_table(col))
 
             for row in rows:
-                table.insert("", "end", values=row)
+                self.table.insert("", "end", values=row)
+                # Establecer el ancho de cada columna al ancho mínimo requerido
+                for i, item in enumerate(row):
+                    col_width = tkFont.Font().measure(item)
+                    if self.table.column(self.headings[i], width=None) < col_width:
+                        self.table.column(self.headings[i], width=col_width)
 
-            scrolltable = ttk.Scrollbar(self, orient="vertical", command=table.yview)
-            table.configure(yscrollcommand=scrolltable.set)
+            scrolltable = ttk.Scrollbar(self, orient="vertical", command=self.table.yview)
+            self.table.configure(yscrollcommand=scrolltable.set)
             scrolltable.pack(side="right", fill="y")
-            table.pack(expand=True, fill="both")
+            self.table.pack(expand=True, fill="both")
+
+        def sort_table(self, col):
+            # Si se hace clic en la misma columna, invertir el orden de clasificación
+            if col == self.sort_column:
+                self.sort_descending = not self.sort_descending
+            else:
+                self.sort_column = col
+                self.sort_descending = False
+
+            # Ordenar las filas según la columna correspondiente
+            col_index = self.headings.index(col)
+            self.rows.sort(key=lambda row: row[col_index], reverse=self.sort_descending)
+
+            # Eliminar todas las filas actuales de la tabla
+            for row in self.table.get_children():
+                self.table.delete(row)
+
+            # Agregar las filas ordenadas a la tabla
+            for row in self.rows:
+                self.table.insert("", "end", values=row)
 
     # Obtener los encabezados y las filas de la tabla
     headings = df.columns.tolist()
