@@ -16,11 +16,14 @@ conexion = sqlite3.connect('finanzas.db')
 # Formato de fecha
 date = '%Y-%m-%d'
 
+# Tamaño de la ventana
+ventana_size = "800x500"
+
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
     ventana_ingresos = tk.Toplevel()
-    ventana_ingresos.geometry("500x500")
+    ventana_ingresos.geometry(ventana_size)
     ventana_ingresos.config(bg='#9bfab0')
 
     # Crear campo para ingresar el monto
@@ -61,7 +64,7 @@ def abrir_gastos():
     # Crear ventana emergente para gastos
     global ventana_gastos
     ventana_gastos = tk.Toplevel()
-    ventana_gastos.geometry("500x500")
+    ventana_gastos.geometry(ventana_size)
     ventana_gastos.config(bg='#9bfab0')
     
     # Crear campo para ingresar el monto
@@ -148,7 +151,7 @@ def abrir_resumen():
     # Crear ventana emergente para resumen
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
-    ventana_resumen.geometry("500x500")
+    ventana_resumen.geometry(ventana_size)
     ventana_resumen.config(bg='#9bfab0')
     
     # Crear botón de inicio en la ventana emergente
@@ -258,7 +261,7 @@ fondo.place(x = 150, y = 20, width = 70, height = 70)
 
 
 # Establecer tamaño de ventana
-ventana.geometry("500x500")
+ventana.geometry(ventana_size)
 ventana.config(bg = "lightblue")
 ventana.title("Ni un $inco")
 
