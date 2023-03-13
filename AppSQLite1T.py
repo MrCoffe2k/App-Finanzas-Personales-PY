@@ -1,9 +1,10 @@
 from tkcalendar import Calendar
-from tkinter import ttk
+from tkinter import messagebox, ttk
 import tkinter as tk
 import tkinter.font as tkFont
 import sqlite3
 import pandas as pd
+import datetime
 
 # Conectar a la base de datos
 conexion = sqlite3.connect('finanzas.db')
@@ -97,6 +98,40 @@ def guardar_gasto():
     c.execute("INSERT INTO movimientos VALUES (?, ?, ?, 'gasto')", (monto, fecha, categoria))
     conexion.commit()
 
+def calcular_gastos():
+    meses = {
+    "Enero": 1,
+    "Febrero": 2,
+    "Marzo": 3,
+    "Abril": 4,
+    "Mayo": 5,
+    "Junio": 6,
+    "Julio": 7,
+    "Agosto": 8,
+    "Septiembre": 9,
+    "Octubre": 10,
+    "Noviembre": 11,
+    "Diciembre": 12
+    }
+    # Obtener el mes y año seleccionados
+    mes = meses[cbx_mes.get()]
+    year = int(cbx_year.get())
+    fecha_inicio = datetime.datetime(year, mes, 1).strftime('%d-%m-%Y')
+    fecha_fin = datetime.datetime(year, mes +1, 1) - datetime.timedelta(days=1)
+    fecha_fin = fecha_fin.strftime('%d-%m-%Y')
+    
+    # Consultar la tabla y filtrar por el período seleccionado
+    df = pd.read_sql_query(f"SELECT * from movimientos WHERE fecha BETWEEN '{fecha_inicio}' AND '{fecha_fin}'", conexion)
+
+    if df.empty:
+        messagebox.showwarning("Datos inexistentes", "No existen datos para el período seleccionado")
+    else:    
+        # Calcular el total de gastos
+        total_gastos = df[df["tipo"] == "gasto"]["monto"].sum()
+
+        # Mostrar el total de gastos en un mensaje
+        messagebox.showinfo("Total de gastos", f"El total de gastos en {mes}/{year} es de ${total_gastos}")
+    
 def abrir_resumen():
     # Crear ventana emergente para resumen
     global ventana_resumen
@@ -106,6 +141,29 @@ def abrir_resumen():
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_resumen, text="Inicio", command=ventana_resumen.destroy)
     btn_inicio.pack(pady=10)
+
+    # Crear sección para seleccionar mes y año
+    frm_fecha = tk.Frame(ventana_resumen)
+    frm_fecha.pack(pady=10)
+
+    lbl_mes = tk.Label(frm_fecha, text="Mes:")
+    lbl_mes.pack(side="left")
+
+    global cbx_mes
+    cbx_mes = ttk.Combobox(frm_fecha, values=["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"])
+    cbx_mes.current(datetime.datetime.today().month - 1)
+    cbx_mes.pack(side="left", padx=5)
+
+    lbl_year = tk.Label(frm_fecha, text="Año:")
+    lbl_year.pack(side="left")
+
+    global cbx_year
+    cbx_year = ttk.Combobox(frm_fecha, values=[str(year) for year in range(datetime.datetime.today().year, datetime.datetime.today().year - 10, -1)])
+    cbx_year.current(0)
+    cbx_year.pack(side="left", padx=5)
+
+    btn_calcular = tk.Button(frm_fecha, text="Calcular", command=calcular_gastos)
+    btn_calcular.pack(side="left")
 
     # Consultar la tabla y cargar los datos en un DataFrame de Pandas
     df = pd.read_sql_query("SELECT * from movimientos", conexion)
