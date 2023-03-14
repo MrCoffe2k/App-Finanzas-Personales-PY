@@ -17,11 +17,15 @@ date = '%Y-%m-%d'
 
 # Imagen que se usa como icono
 icono = "icono.ico"
+
+# Tamaño de las ventanas en general
+ventana_size = "500x500"
+
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
     ventana_ingresos = tk.Toplevel()
-    ventana_ingresos.geometry("500x500")
+    ventana_ingresos.geometry(ventana_size)
     ventana_ingresos.config(bg='#9bfab0')
     ventana_ingresos.iconbitmap(icono)
 
@@ -64,7 +68,7 @@ def abrir_gastos():
     # Crear ventana emergente para gastos
     global ventana_gastos
     ventana_gastos = tk.Toplevel()
-    ventana_gastos.geometry("500x500")
+    ventana_gastos.geometry(ventana_size)
     ventana_gastos.config(bg='#9bfab0')
     ventana_gastos.iconbitmap(icono)
     
@@ -153,7 +157,7 @@ def abrir_resumen():
     # Crear ventana emergente para resumen
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
-    ventana_resumen.geometry("500x500")
+    ventana_resumen.geometry(ventana_size)
     ventana_resumen.config(bg='#9bfab0')
     ventana_resumen.iconbitmap(icono)
     
@@ -258,7 +262,7 @@ def cerrar():
 ventana = tk.Tk()
 
 # Establecer tamaño de ventana
-ventana.geometry("500x500")
+ventana.geometry(ventana_size)
 ventana.config(bg = "lightblue")
 ventana.title("Ni un $inco")
 
