@@ -1,4 +1,3 @@
-from tkinter import *
 from tkcalendar import Calendar
 from tkinter import messagebox, ttk
 import tkinter as tk
@@ -6,7 +5,7 @@ import tkinter.font as tkFont
 import sqlite3
 import pandas as pd
 import datetime
-
+from PIL import ImageTk, Image
 
 # Conectar a la base de datos
 conexion = sqlite3.connect('finanzas.db')
@@ -16,15 +15,15 @@ conexion = sqlite3.connect('finanzas.db')
 # Formato de fecha
 date = '%Y-%m-%d'
 
-# Tamaño de la ventana
-ventana_size = "800x500"
-
+# Imagen que se usa como icono
+icono = "icono.ico"
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
     ventana_ingresos = tk.Toplevel()
-    ventana_ingresos.geometry(ventana_size)
+    ventana_ingresos.geometry("500x500")
     ventana_ingresos.config(bg='#9bfab0')
+    ventana_ingresos.iconbitmap(icono)
 
     # Crear campo para ingresar el monto
     lbl_monto = tk.Label(ventana_ingresos, font=('Normographe', 11, 'bold'), text="Monto:", bg = "yellow")
@@ -50,22 +49,24 @@ def abrir_ingresos():
                             background="lightblue", command=guardar_ingreso)
     btn_guardar.pack(pady=10)
 
-def guardar_ingreso():
+def guardar_ingreso():    
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
     fecha = cal_fecha.selection_get().strftime(date)
     c = conexion.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS movimientos
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
-    c.execute("INSERT INTO movimientos VALUES (?, ?, ' ', 'ingreso')", (monto, fecha))
+    c.execute("INSERT INTO movimientos VALUES (?, ?, ' ', 'ingreso')", (monto, fecha))    
     conexion.commit()
-
+    entry_monto.delete(0,tk.END)    
+    
 def abrir_gastos():
     # Crear ventana emergente para gastos
     global ventana_gastos
     ventana_gastos = tk.Toplevel()
-    ventana_gastos.geometry(ventana_size)
+    ventana_gastos.geometry("500x500")
     ventana_gastos.config(bg='#9bfab0')
+    ventana_gastos.iconbitmap(icono)
     
     # Crear campo para ingresar el monto
     lbl_monto = tk.Label(ventana_gastos, font=('Normographe', 11, 'bold'), text="Monto:", bg = "yellow")
@@ -112,6 +113,7 @@ def guardar_gasto():
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
     c.execute("INSERT INTO movimientos VALUES (?, ?, ?, 'gasto')", (monto, fecha, categoria))
     conexion.commit()
+    entry_monto.delete(0,tk.END)
 
 def calcular_gastos():
     meses = {
@@ -151,8 +153,9 @@ def abrir_resumen():
     # Crear ventana emergente para resumen
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
-    ventana_resumen.geometry(ventana_size)
+    ventana_resumen.geometry("500x500")
     ventana_resumen.config(bg='#9bfab0')
+    ventana_resumen.iconbitmap(icono)
     
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_resumen, text="Inicio", height=2, width=10, font=('Normographe', 11, 'bold'),
@@ -253,18 +256,18 @@ def cerrar():
 
 # Crear ventana principal
 ventana = tk.Tk()
-'''
-img = PhotoImage(file = '../FinanzaPersonal/finanzaaa.png')
-fondo = Label(ventana, image = img)
-fondo.place(x = 150, y = 20, width = 70, height = 70)
-'''
-
 
 # Establecer tamaño de ventana
-ventana.geometry(ventana_size)
+ventana.geometry("500x500")
 ventana.config(bg = "lightblue")
 ventana.title("Ni un $inco")
 
+# Imagen de fondo principal
+imagen_fondo = Image.open("finanzas.jpg")
+imagen_fondo = ImageTk.PhotoImage(imagen_fondo)
+
+label_fondo = tk.Label(ventana, image=imagen_fondo)
+label_fondo.place(x=0, y=0, relwidth=1, relheight=1)
 
 # Crear botones del menú principal
 btn_ingresos = tk.Button(ventana, text="Ingresos", height= 2, width = 10, font=('Normographe',11,'bold'),background= "palegreen",command=abrir_ingresos)
@@ -273,11 +276,21 @@ btn_resumen = tk.Button(ventana, text="Resumen", height= 2, width = 10,font=('No
 btn_salir = tk.Button(ventana, text="Salir", height= 2, width = 10, font=('Normographe',11,'bold'),background= "palegreen",command=cerrar)
 
 # Posicionar botones en la ventana
+btn_ingresos.place(x = 202, y = 200)
+btn_gastos.place(x = 202, y = 270)
+btn_resumen.place(x = 202, y = 340)
+btn_salir.place(x = 202, y = 410)
 
-btn_ingresos.place(x = 210, y = 200)
-btn_gastos.place(x = 210, y = 270)
-btn_resumen.place(x = 210, y = 340)
-btn_salir.place(x = 210, y = 410)
+# Imagen menú principal
+image = Image.open('diner.png')
+image = image.resize((220,150),Image.LANCZOS)
+
+img = ImageTk.PhotoImage(image)
+lbl_img = tk.Label(ventana,image=img)
+lbl_img.place(x=140,y=25)
+
+# Icono de la ventana
+ventana.iconbitmap(icono)
 
 # Ejecutar ventana
 ventana.mainloop()
