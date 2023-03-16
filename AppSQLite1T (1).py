@@ -21,6 +21,18 @@ icono = "icono.ico"
 # Tamaño de las ventanas en general
 ventana_size = "500x500"
 
+def validate_entry(text):
+    if text.isdigit() or text == "":
+        return True
+    else:
+        messagebox.showerror("Error", "Ingrese solo números")
+        return False
+
+def validate_on_focusout(event):
+    text = entry_monto.get()
+    if not text.isdigit() and text != "":
+        messagebox.showerror("Error", "Ingrese solo números")
+
 def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
@@ -28,13 +40,16 @@ def abrir_ingresos():
     ventana_ingresos.geometry(ventana_size)
     ventana_ingresos.config(bg='#9bfab0')
     ventana_ingresos.iconbitmap(icono)
+    ventana_ingresos.grab_set()
 
     # Crear campo para ingresar el monto
     lbl_monto = tk.Label(ventana_ingresos, font=('Normographe', 11, 'bold'), text="Monto:", bg = "yellow")
     lbl_monto.pack(pady=5)
     global entry_monto
-    entry_monto = tk.Entry(ventana_ingresos)
+    entry_monto = tk.Entry(ventana_ingresos, validate="key")
+    entry_monto['validatecommand'] = (entry_monto.register(validate_entry), '%S')
     entry_monto.pack(pady=5)
+    entry_monto.bind("<FocusOut>", validate_on_focusout)
 
     # Crear calendario para seleccionar la fecha
     lbl_fecha = tk.Label(ventana_ingresos, font=('Normographe', 11, 'bold'), text="Fecha:", bg = "yellow")
@@ -56,6 +71,10 @@ def abrir_ingresos():
 def guardar_ingreso():    
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
+    # Comprobar si el campo de monto está vacío
+    if not monto:
+        messagebox.showerror("Error", "El campo de monto está vacío.")
+        return
     fecha = cal_fecha.selection_get().strftime(date)
     c = conexion.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS movimientos
@@ -71,13 +90,16 @@ def abrir_gastos():
     ventana_gastos.geometry(ventana_size)
     ventana_gastos.config(bg='#9bfab0')
     ventana_gastos.iconbitmap(icono)
+    ventana_gastos.grab_set()
     
     # Crear campo para ingresar el monto
     lbl_monto = tk.Label(ventana_gastos, font=('Normographe', 11, 'bold'), text="Monto:", bg = "yellow")
     lbl_monto.pack(pady=5)
     global entry_monto
-    entry_monto = tk.Entry(ventana_gastos)
+    entry_monto = tk.Entry(ventana_gastos, validate="key")
+    entry_monto['validatecommand'] = (entry_monto.register(validate_entry), '%S')
     entry_monto.pack(pady=5)
+    entry_monto.bind("<FocusOut>", validate_on_focusout)
 
     # Crear lista desplegable para seleccionar la categoría
     lbl_categoria = tk.Label(ventana_gastos, font=('Normographe', 11, 'bold'), text="Categoría:", bg = "yellow")
@@ -106,10 +128,13 @@ def abrir_gastos():
                             background="lightblue", command=guardar_gasto)
     btn_guardar.pack(pady=10)
 
-
 def guardar_gasto():
     # Obtener los valores de los campos de entrada
     monto = entry_monto.get()
+    # Comprobar si el campo de monto está vacío
+    if not monto:
+        messagebox.showerror("Error", "El campo de monto está vacío.")
+        return
     categoria = var_categoria.get()
     fecha = cal_fecha.selection_get().strftime(date)
     c = conexion.cursor()
@@ -160,7 +185,8 @@ def abrir_resumen():
     ventana_resumen.geometry(ventana_size)
     ventana_resumen.config(bg='#9bfab0')
     ventana_resumen.iconbitmap(icono)
-    
+    ventana_resumen.grab_set()
+
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_resumen, text="Inicio", height=2, width=10, font=('Normographe', 11, 'bold'),
                             background="lightblue",command=ventana_resumen.destroy)
