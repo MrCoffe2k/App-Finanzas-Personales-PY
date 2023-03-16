@@ -8,7 +8,7 @@ import datetime
 from PIL import ImageTk, Image
 
 # Conectar a la base de datos
-conexion = sqlite3.connect('finanzas.db')
+conexion = sqlite3.connect('database/finanzas.db')
 
 # Funciones que se ejecutan al hacer clic en los botones del menú principal
 
@@ -16,7 +16,7 @@ conexion = sqlite3.connect('finanzas.db')
 date = '%Y-%m-%d'
 
 # Imagen que se usa como icono
-icono = "icono.ico"
+icono = "images/icono.ico"
 
 # Tamaño de las ventanas en general
 ventana_size = "500x500"
@@ -34,6 +34,8 @@ def validate_on_focusout(event):
         messagebox.showerror("Error", "Ingrese solo números")
 
 def abrir_ingresos():
+    # Minizar la ventana principal
+    ventana.iconify()
     # Crear ventana emergente para ingresos
     global ventana_ingresos
     ventana_ingresos = tk.Toplevel()
@@ -60,7 +62,7 @@ def abrir_ingresos():
 
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_ingresos, text="Inicio", height=2, width=10, font=('Normographe', 11, 'bold'),
-                           background="lightblue", command=ventana_ingresos.destroy)
+                           background="lightblue", command=cerrar_ingreso)
     btn_inicio.pack(pady=10)
 
     # Crear botón de guardar en la ventana emergente
@@ -81,9 +83,15 @@ def guardar_ingreso():
                  (monto REAL, fecha TEXT, categoria TEXT NULL, tipo TEXT)''')
     c.execute("INSERT INTO movimientos VALUES (?, ?, ' ', 'ingreso')", (monto, fecha))    
     conexion.commit()
-    entry_monto.delete(0,tk.END)    
+    entry_monto.delete(0,tk.END)
+
+def cerrar_ingreso():
+    ventana_ingresos.destroy()
+    ventana.deiconify()
     
 def abrir_gastos():
+    # Minizar la ventana principal
+    ventana.iconify()
     # Crear ventana emergente para gastos
     global ventana_gastos
     ventana_gastos = tk.Toplevel()
@@ -120,7 +128,7 @@ def abrir_gastos():
 
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_gastos, text="Inicio", height=2, width=10, font=('Normographe', 11, 'bold'),
-                           background="lightblue", command=ventana_gastos.destroy)
+                           background="lightblue", command=cerrar_gasto)
     btn_inicio.pack(pady=10)
 
     # Crear botón de guardar en la ventana emergente
@@ -177,8 +185,14 @@ def calcular_gastos():
 
         # Mostrar el total de gastos en un mensaje
         messagebox.showinfo("Total de gastos", f"El total de gastos en {cbx_mes.get()} - {cbx_year.get()} es de ${total_gastos}")
+
+def cerrar_gasto():
+    ventana_gastos.destroy()
+    ventana.deiconify()
     
 def abrir_resumen():
+    # Minizar la ventana principal
+    ventana.iconify()
     # Crear ventana emergente para resumen
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
@@ -189,7 +203,7 @@ def abrir_resumen():
 
     # Crear botón de inicio en la ventana emergente
     btn_inicio = tk.Button(ventana_resumen, text="Inicio", height=2, width=10, font=('Normographe', 11, 'bold'),
-                            background="lightblue",command=ventana_resumen.destroy)
+                            background="lightblue",command=cerrar_resumen)
     btn_inicio.pack(pady=10)
 
     # Crear sección para seleccionar mes y año
@@ -279,6 +293,10 @@ def abrir_resumen():
     table = Table(ventana_resumen, headings=headings, rows=rows)
     table.pack(expand=True, fill="both")
 
+def cerrar_resumen():
+    ventana_resumen.destroy()
+    ventana.deiconify()
+
 # Función para cerrar la conexion a la base de datos y las ventanas
 def cerrar():
     conexion.close()
@@ -293,7 +311,7 @@ ventana.config(bg = "lightblue")
 ventana.title("Ni un $inco")
 
 # Imagen de fondo principal
-imagen_fondo = Image.open("finanzas.jpg")
+imagen_fondo = Image.open("images/finanzas.jpg")
 imagen_fondo = ImageTk.PhotoImage(imagen_fondo)
 
 label_fondo = tk.Label(ventana, image=imagen_fondo)
@@ -312,7 +330,7 @@ btn_resumen.place(x = 202, y = 340)
 btn_salir.place(x = 202, y = 410)
 
 # Imagen menú principal
-image = Image.open('diner.png')
+image = Image.open('images/diner.png')
 image = image.resize((220,150),Image.LANCZOS)
 
 img = ImageTk.PhotoImage(image)
