@@ -5,6 +5,7 @@ import tkinter.font as tkFont
 import sqlite3
 import pandas as pd
 import datetime
+import babel.numbers
 from PIL import ImageTk, Image
 
 # Conectar a la base de datos

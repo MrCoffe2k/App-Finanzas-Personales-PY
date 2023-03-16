@@ -136,3 +136,6 @@ finanzas.db
 
 # Proyecto alterno
 Proyecto Rish
+
+# Salida al convertirlo de .py a .exe usando pip install auto-py-to-exe & auto-py-to-exe
+output
