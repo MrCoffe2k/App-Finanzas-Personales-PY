@@ -40,7 +40,13 @@ def abrir_ingresos():
     # Crear ventana emergente para ingresos
     global ventana_ingresos
     ventana_ingresos = tk.Toplevel()
-    ventana_ingresos.geometry(ventana_size)
+    screen_width = ventana_ingresos.winfo_screenwidth()
+    screen_height = ventana_ingresos.winfo_screenheight()
+    window_width = 500
+    window_height = 500
+    x = (screen_width // 2) - (window_width // 2)
+    y = (screen_height // 2) - (window_height // 2)
+    ventana_ingresos.geometry('{}x{}+{}+{}'.format(window_width, window_height, x, y))
     ventana_ingresos.config(bg='#9bfab0')
     ventana_ingresos.iconbitmap(icono)
     ventana_ingresos.grab_set()
@@ -96,7 +102,13 @@ def abrir_gastos():
     # Crear ventana emergente para gastos
     global ventana_gastos
     ventana_gastos = tk.Toplevel()
-    ventana_gastos.geometry(ventana_size)
+    screen_width = ventana_gastos.winfo_screenwidth()
+    screen_height = ventana_gastos.winfo_screenheight()
+    window_width = 500
+    window_height = 500
+    x = (screen_width // 2) - (window_width // 2)
+    y = (screen_height // 2) - (window_height // 2)
+    ventana_gastos.geometry('{}x{}+{}+{}'.format(window_width, window_height, x, y))
     ventana_gastos.config(bg='#9bfab0')
     ventana_gastos.iconbitmap(icono)
     ventana_gastos.grab_set()
@@ -197,7 +209,13 @@ def abrir_resumen():
     # Crear ventana emergente para resumen
     global ventana_resumen
     ventana_resumen = tk.Toplevel()
-    ventana_resumen.geometry(ventana_size)
+    screen_width = ventana_resumen.winfo_screenwidth()
+    screen_height = ventana_resumen.winfo_screenheight()
+    window_width = 500
+    window_height = 500
+    x = (screen_width // 2) - (window_width // 2)
+    y = (screen_height // 2) - (window_height // 2)
+    ventana_resumen.geometry('{}x{}+{}+{}'.format(window_width, window_height, x, y))
     ventana_resumen.config(bg='#9bfab0')
     ventana_resumen.iconbitmap(icono)
     ventana_resumen.grab_set()
@@ -307,8 +325,18 @@ def cerrar():
 ventana = tk.Tk()
 
 # Establecer tamaño de ventana
-ventana.geometry(ventana_size)
+screen_width = ventana.winfo_screenwidth()
+screen_height = ventana.winfo_screenheight()
+window_width = 500
+window_height = 500
+x = (screen_width // 2) - (window_width // 2)
+y = (screen_height // 2) - (window_height // 2)
+ventana.geometry('{}x{}+{}+{}'.format(window_width, window_height, x, y))
+
+# Establecer el color de la ventana
 ventana.config(bg = "lightblue")
+
+# Establecer el titulo de la ventana
 ventana.title("Ni un $inco")
 
 # Imagen de fondo principal
