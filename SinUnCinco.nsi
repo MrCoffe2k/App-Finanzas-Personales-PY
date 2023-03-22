@@ -63,6 +63,8 @@ VIAddVersionKey "FileVersion" "${SETUP_VERSION}"
 ; Installer Sections
 Section "SinUnCinco" MyApp
 	SetOutPath $INSTDIR
+	; Put the files into the installation directory.
+    File /r ".\output\SinUnCinco\*"
 	;File "SinUnCinco.exe"
 	;File "Readme.txt"
 	;WriteUninstaller "$INSTDIR\Uninstall.exe"
