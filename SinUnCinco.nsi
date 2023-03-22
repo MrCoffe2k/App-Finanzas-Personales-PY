@@ -32,10 +32,10 @@ VIAddVersionKey "FileVersion" "${SETUP_VERSION}"
 
 ;-------------------------------------------------------------------------------
 ; Modern UI Appearance
-!define MUI_ICON "C:\Users\mauri\Documents\Coding\ITS\App-Finanzas-Personales-PY\images\icono.ico"
+!define MUI_ICON ".\images\icono.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "C:\Users\mauri\Documents\Coding\ITS\App-Finanzas-Personales-PY\images\Dinero.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP ".\images\Dinero.bmp"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 
 ;-------------------------------------------------------------------------------
