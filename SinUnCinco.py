@@ -6,6 +6,7 @@ import sqlite3
 import pandas as pd
 import datetime
 import babel.numbers
+import sys
 from PIL import ImageTk, Image
 
 # Conectar a la base de datos
@@ -319,7 +320,7 @@ def cerrar_resumen():
 # Función para cerrar la conexion a la base de datos y las ventanas
 def cerrar():
     conexion.close()
-    ventana.destroy()
+    sys.exit(0)
 
 # Crear ventana principal
 ventana = tk.Tk()
